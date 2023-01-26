@@ -7,11 +7,13 @@ using System.Management;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace MinecraftSpeedrunTracker
 {
     internal class Program
     {
+        const string Version = "";
         private static System.Timers.Timer timer;
 
         [DllImport("user32.dll")]
@@ -136,6 +138,9 @@ namespace MinecraftSpeedrunTracker
                 {
                     string jsonRecord = File.ReadAllText($"{mostRecentWorld.FullName}\\speedrunigt\\record.json");
 
+                    var obj = JsonConvert.DeserializeObject(jsonRecord);
+                    jsonRecord = JsonConvert.SerializeObject(obj, Formatting.None);
+
                     Console.WriteLine("jsonRecord has changed");
 
                     if (firebaseClient != null)
@@ -226,6 +231,11 @@ namespace MinecraftSpeedrunTracker
         {
             Guid x;
             return Guid.TryParse(value, out x);
+        }
+
+        public static bool CheckVersion()
+        {
+            return true;
         }
     }
 }
