@@ -8,12 +8,13 @@ using Firebase.Database;
 using Firebase.Database.Query;
 using System.Net;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace MinecraftSpeedrunTracker
 {
     internal class Program
     {
-        const string Version = "";
+        const string Version = "0.0.1";
         private static System.Timers.Timer timer;
 
         [DllImport("user32.dll")]
@@ -43,7 +44,7 @@ namespace MinecraftSpeedrunTracker
         public static void Main(string[] args)
         {
             Console.WriteLine("Starting Minecraft Speedrun Tracker");
-            Console.WriteLine("Checking for user key");
+            CheckVersion();
 
             if(!File.Exists(userConfigFilePath))
             {
@@ -235,6 +236,29 @@ namespace MinecraftSpeedrunTracker
 
         public static bool CheckVersion()
         {
+            Console.WriteLine($"Running Version {Version}");
+            HttpWebRequest request = WebRequest.Create("https://podx12.github.io/MinecraftSpeedrunTrackerConsole/version.txt") as HttpWebRequest;
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            WebHeaderCollection header = response.Headers;
+
+            using (var reader = new StreamReader(response.GetResponseStream(), Encoding.ASCII))
+            {
+                string v = reader.ReadToEnd();
+                if(Version != v)
+                {
+                    Console.WriteLine("!!! !!! !!! !!!");
+                    Console.WriteLine("YOU NEED THE LATEST VERSION TO USE");
+                    Console.WriteLine("DOWNLOAD NEW VERSION > https://github.com/PodX12/MinecraftSpeedrunTrackerConsole/releases/latest");
+                    Console.WriteLine("!!! !!! !!! !!!");
+
+                    Console.WriteLine("Terminating the application...");
+                    Console.ReadLine();
+                    Environment.Exit(0);
+                }
+            }
+
             return true;
         }
     }
