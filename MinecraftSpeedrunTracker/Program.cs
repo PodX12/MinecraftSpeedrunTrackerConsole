@@ -14,7 +14,7 @@ namespace MinecraftSpeedrunTracker
 {
     internal class Program
     {
-        const string Version = "0.0.1";
+        const string Version = "0.0.2";
         private static System.Timers.Timer timer;
 
         [DllImport("user32.dll")]
